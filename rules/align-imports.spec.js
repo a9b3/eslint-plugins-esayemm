@@ -82,7 +82,7 @@ describe('align-imports fixable', () => {
     expect(output).toEqual(expectedResult)
   })
 
-  it('should align', () => {
+  it('should align import groups', () => {
     const before = [
       ``,
       `import b from 'b'`,
