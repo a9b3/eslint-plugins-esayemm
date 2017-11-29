@@ -59,3 +59,9 @@ import b from 'b'
 ## Development
 
 Run `make` to see the development API.
+
+## Links
+
+- [astexplorer](http://astexplorer.net/)
+- [eslint nodejs api](https://eslint.org/docs/developer-guide/nodejs-api)
+- [eslint working with rules](https://eslint.org/docs/developer-guide/working-with-rules#contextgetsourcecode)
