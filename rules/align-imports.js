@@ -10,8 +10,8 @@ function isAligned(nodeText, paddingLength) {
 function alignNode(nodeText, paddingLength) {
   const lines = nodeText.split('\n')
   const tokens = lines[lines.length - 1].split('from')
-  const requiredSpaces = paddingLength - tokens[0].length
-  tokens[0] = tokens[0] + ' '.repeat(requiredSpaces)
+  const requiredSpaces = paddingLength - tokens[0].trim().length
+  tokens[0] = tokens[0].trim() + ' '.repeat(requiredSpaces)
   const alignedLastLine = tokens.join('from')
 
   return [...lines.slice(0, lines.length - 1), alignedLastLine].join('\n')
@@ -31,10 +31,15 @@ module.exports = {
         const importNodes = node.body.filter(n => n.type === 'ImportDeclaration')
         paddingLength = Math.max(
           ...importNodes
-            .map(n => sourceCode.getText(n)
-            .split('from')[0])
-            .map(textBlob => Math.max(...textBlob.split('\n')
-            .map(s => s.length)))
+            .map(
+              n => sourceCode.getText(n).split('from')[0]
+            )
+            .map(
+              textBlob => Math.max(
+                ...textBlob.split('\n')
+                  .map(s => s.trim().length + 1)
+              )
+            )
         )
       },
       ImportDeclaration: node => {

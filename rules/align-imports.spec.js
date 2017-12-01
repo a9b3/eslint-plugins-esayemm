@@ -104,4 +104,27 @@ describe('align-imports fixable', () => {
     })
     expect(output).toEqual(expectedResult)
   })
+
+  it('should trim extra spaces', () => {
+    const before = [
+      ``,
+      `import b          from 'b'`,
+      ``,
+      `import ab             from 'ab'`,
+      ``,
+    ].join('\n')
+    const expectedResult = [
+      ``,
+      `import b  from 'b'`,
+      ``,
+      `import ab from 'ab'`,
+      ``,
+    ].join('\n')
+
+    const { output } = linter.verifyAndFix(before, {
+      parserOptions: { sourceType: 'module' },
+      rules: { 'align-imports': 'error' },
+    })
+    expect(output).toEqual(expectedResult)
+  })
 })
