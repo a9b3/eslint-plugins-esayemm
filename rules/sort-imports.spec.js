@@ -142,4 +142,34 @@ describe('sort-imports fixable', () => {
     expect(messages.fixed).toBe(true)
     expect(messages.output).toEqual(expectedResult)
   })
+
+  it('should handle paths', () => {
+    const before = [
+      ``,
+      `import c from 'abc/abc'`,
+      `import b from 'abc/abc/abc'`,
+      ``,
+      `import e from 'mobx/me'`,
+      `import d from 'abc/abc/abc/abc'`,
+      `import ok from 'abc/abc/abc/ok'`,
+      ``,
+    ].join('\n')
+    const expectedResult = [
+      ``,
+      `import c from 'abc/abc'`,
+      `import b from 'abc/abc/abc'`,
+      ``,
+      `import d from 'abc/abc/abc/abc'`,
+      `import ok from 'abc/abc/abc/ok'`,
+      `import e from 'mobx/me'`,
+      ``,
+    ].join('\n')
+
+    const messages = linter.verifyAndFix(before, {
+      parserOptions: { sourceType: 'module' },
+      rules: { 'sort-imports': 'error' },
+    })
+    expect(messages.fixed).toBe(true)
+    expect(messages.output).toEqual(expectedResult)
+  })
 })

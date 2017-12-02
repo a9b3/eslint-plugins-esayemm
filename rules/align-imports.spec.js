@@ -28,6 +28,13 @@ ruleTester.run('align-imports', rule, {
     {
       code: [
         ``,
+        `import 'foo'`,
+        `import 'barbar'`,
+      ].join('\n'),
+    },
+    {
+      code: [
+        ``,
         `import foo from 'foo'`,
         `import b   from 'b'`,
         `import {`,

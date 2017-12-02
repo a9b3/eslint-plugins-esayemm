@@ -11,7 +11,9 @@ function alignNode(nodeText, paddingLength) {
   const lines = nodeText.split('\n')
   const tokens = lines[lines.length - 1].split('from')
   const requiredSpaces = paddingLength - tokens[0].trim().length
-  tokens[0] = tokens[0].trim() + ' '.repeat(requiredSpaces)
+  if (requiredSpaces > 0) {
+    tokens[0] = tokens[0].trim() + ' '.repeat(requiredSpaces)
+  }
   const alignedLastLine = tokens.join('from')
 
   return [...lines.slice(0, lines.length - 1), alignedLastLine].join('\n')
@@ -31,6 +33,7 @@ module.exports = {
         const importNodes = node.body.filter(n => n.type === 'ImportDeclaration')
         paddingLength = Math.max(
           ...importNodes
+            .filter(n => n.specifiers.length > 0)
             .map(
               n => sourceCode.getText(n).split('from')[0]
             )
@@ -45,7 +48,7 @@ module.exports = {
       ImportDeclaration: node => {
         const aligned = isAligned(sourceCode.getText(node), paddingLength)
 
-        if (!aligned) {
+        if (!aligned && node.specifiers.length > 0) {
           context.report({
             node,
             message: 'import statements should be aligned',
