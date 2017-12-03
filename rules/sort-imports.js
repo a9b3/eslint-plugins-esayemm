@@ -26,7 +26,7 @@ module.exports = {
         // check if its already sorted
         const isSorted = importNodeGroup.every(g => {
           for (let i = 0; i < g.length-1; i++) {
-            if (g[i+1].source.value <= g[i].source.value) {
+            if (g[i+1].source.value < g[i].source.value) {
               return false
             }
           }

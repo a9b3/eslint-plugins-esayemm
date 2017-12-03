@@ -40,6 +40,15 @@ ruleTester.run('sort-imports', rule, {
     {
       code: [
         ``,
+        `import d from './abc'`,
+        `import e from './bcd'`,
+        `import a from 'a'`,
+        `import c from 'c'`,
+      ].join('\n'),
+    },
+    {
+      code: [
+        ``,
       ].join('\n'),
     },
   ],
@@ -171,5 +180,33 @@ describe('sort-imports fixable', () => {
     })
     expect(messages.fixed).toBe(true)
     expect(messages.output).toEqual(expectedResult)
+  })
+
+  it('should handle relative paths', () => {
+    const before = [
+      ``,
+      `import d from './abc'`,
+      `import a from 'a'`,
+      `import c from 'c'`,
+      `import o from './bcd/ok'`,
+      `import e from './bcd'`,
+      ``,
+    ].join('\n')
+    const expectedResult = [
+      ``,
+      `import d from './abc'`,
+      `import e from './bcd'`,
+      `import o from './bcd/ok'`,
+      `import a from 'a'`,
+      `import c from 'c'`,
+      ``,
+    ].join('\n')
+
+    const messages = linter.verifyAndFix(before, {
+      parserOptions: { sourceType: 'module' },
+      rules: { 'sort-imports': 'error' },
+    })
+    expect(messages.output).toEqual(expectedResult)
+    expect(messages.fixed).toBe(true)
   })
 })
