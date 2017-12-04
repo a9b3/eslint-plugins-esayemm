@@ -209,4 +209,44 @@ describe('sort-imports fixable', () => {
     expect(messages.output).toEqual(expectedResult)
     expect(messages.fixed).toBe(true)
   })
+
+  it('should handle relative paths failing', () => {
+    const before = [
+      ``,
+      `import verify                        from 'auth/middleware'`,
+      `import config                        from 'config'`,
+      `import * as questionController       from './controllers/question'`,
+      `import * as userController           from './controllers/user'`,
+      `import * as userAnswerController     from './controllers/userAnswer'`,
+      `import healthcheck                   from './controllers/healthcheck'`,
+      `import * as enrollmentController     from 'enrollment/controller'`,
+      `import * as enrollmentDateController from 'enrollmentDate/controller'`,
+      `import index                         from 'express/controllers/index'`,
+      `import requireAdmin                  from 'express/middlewares/admin'`,
+      `import {asyncWrap}                   from 'express/middlewares/tryCatchMiddleware'`,
+      ``,
+    ].join('\n')
+    const expectedResult = [
+      ``,
+      `import healthcheck                   from './controllers/healthcheck'`,
+      `import * as questionController       from './controllers/question'`,
+      `import * as userController           from './controllers/user'`,
+      `import * as userAnswerController     from './controllers/userAnswer'`,
+      `import verify                        from 'auth/middleware'`,
+      `import config                        from 'config'`,
+      `import * as enrollmentController     from 'enrollment/controller'`,
+      `import * as enrollmentDateController from 'enrollmentDate/controller'`,
+      `import index                         from 'express/controllers/index'`,
+      `import requireAdmin                  from 'express/middlewares/admin'`,
+      `import {asyncWrap}                   from 'express/middlewares/tryCatchMiddleware'`,
+      ``,
+    ].join('\n')
+
+    const messages = linter.verifyAndFix(before, {
+      parserOptions: { sourceType: 'module' },
+      rules: { 'sort-imports': 'error' },
+    })
+    expect(messages.output).toEqual(expectedResult)
+    expect(messages.fixed).toBe(true)
+  })
 })

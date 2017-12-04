@@ -8,7 +8,7 @@ module.exports = {
     const sourceCode = context.getSourceCode()
 
     return {
-      Program: node => {
+      'Program:exit': node => {
         const importNodes = node.body.filter(n => n.type === 'ImportDeclaration')
         const importNodeGroup = importNodes.reduce((arr, n) => {
           const prevNode = arr[arr.length - 1] && arr[arr.length - 1][arr[arr.length - 1].length - 1]
@@ -34,9 +34,17 @@ module.exports = {
         })
 
         if (!isSorted) {
-          const sortedImportNodeGroup = importNodeGroup.map(g => g.sort((a, b) => {
-            return a.source.value > b.source.value
-          }))
+          const sortedImportNodeGroup = importNodeGroup.map(
+            g => g.sort((a, b) => {
+              if (a.source.value > b.source.value) {
+                return 1
+              } else if (a.source.value < b.source.value) {
+                return -1
+              } else {
+                return 0
+              }
+            })
+          )
 
           context.report({
             node,
