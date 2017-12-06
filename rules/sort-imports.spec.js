@@ -210,35 +210,25 @@ describe('sort-imports fixable', () => {
     expect(messages.fixed).toBe(true)
   })
 
-  it('should handle relative paths failing', () => {
+  it('should handle imports between code', () => {
     const before = [
       ``,
-      `import verify                        from 'auth/middleware'`,
-      `import config                        from 'config'`,
-      `import * as questionController       from './controllers/question'`,
-      `import * as userController           from './controllers/user'`,
-      `import * as userAnswerController     from './controllers/userAnswer'`,
-      `import healthcheck                   from './controllers/healthcheck'`,
-      `import * as enrollmentController     from 'enrollment/controller'`,
-      `import * as enrollmentDateController from 'enrollmentDate/controller'`,
-      `import index                         from 'express/controllers/index'`,
-      `import requireAdmin                  from 'express/middlewares/admin'`,
-      `import {asyncWrap}                   from 'express/middlewares/tryCatchMiddleware'`,
+      `import a from 'a'`,
+      ``,
+      `const testing = true`,
+      ``,
+      `import c from 'c'`,
+      `import b from 'b'`,
       ``,
     ].join('\n')
     const expectedResult = [
       ``,
-      `import healthcheck                   from './controllers/healthcheck'`,
-      `import * as questionController       from './controllers/question'`,
-      `import * as userController           from './controllers/user'`,
-      `import * as userAnswerController     from './controllers/userAnswer'`,
-      `import verify                        from 'auth/middleware'`,
-      `import config                        from 'config'`,
-      `import * as enrollmentController     from 'enrollment/controller'`,
-      `import * as enrollmentDateController from 'enrollmentDate/controller'`,
-      `import index                         from 'express/controllers/index'`,
-      `import requireAdmin                  from 'express/middlewares/admin'`,
-      `import {asyncWrap}                   from 'express/middlewares/tryCatchMiddleware'`,
+      `import a from 'a'`,
+      ``,
+      `const testing = true`,
+      ``,
+      `import b from 'b'`,
+      `import c from 'c'`,
       ``,
     ].join('\n')
 
