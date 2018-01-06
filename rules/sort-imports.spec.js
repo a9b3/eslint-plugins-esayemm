@@ -1,24 +1,16 @@
-'use strict';
+'use strict'
 
 const expect = require('expect')
 const rule = require('./sort-imports.js')
-const {
-  RuleTester,
-  Linter,
-} = require('eslint')
+const { RuleTester, Linter } = require('eslint')
 
 const linter = new Linter()
-linter.defineRules({
-  'sort-imports': rule,
-})
+linter.defineRules({ 'sort-imports': rule })
 const ruleTester = new RuleTester({ parserOptions: { sourceType: 'module' } })
 ruleTester.run('sort-imports', rule, {
   valid: [
     {
-      code: [
-        ``,
-        `import a from 'a'`,
-      ].join('\n'),
+      code: [``, `import a from 'a'`].join('\n'),
     },
     {
       code: [
@@ -47,9 +39,7 @@ ruleTester.run('sort-imports', rule, {
       ].join('\n'),
     },
     {
-      code: [
-        ``,
-      ].join('\n'),
+      code: [``].join('\n'),
     },
   ],
   invalid: [
@@ -60,7 +50,7 @@ ruleTester.run('sort-imports', rule, {
         `import a from 'a'`,
         `import b from 'b'`,
       ].join('\n'),
-      errors: [{message: 'import statements should be sorted'}],
+      errors: [{ message: 'import statements should be sorted' }],
     },
   ],
 })

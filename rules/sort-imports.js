@@ -16,7 +16,9 @@ module.exports = {
 
     return {
       'Program:exit': node => {
-        const importNodes = node.body.filter(n => n.type === 'ImportDeclaration')
+        const importNodes = node.body.filter(
+          n => n.type === 'ImportDeclaration'
+        )
         const importNodeGroup = importNodes.reduce((arr, n, i) => {
           const prevNode = importNodes[i - 1]
           if (!prevNode || n.start - prevNode.end > 1) {
@@ -28,8 +30,8 @@ module.exports = {
 
         // check if its already sorted
         const isSorted = importNodeGroup.every(g => {
-          for (let i = 0; i < g.length-1; i++) {
-            if (g[i+1].source.value < g[i].source.value) {
+          for (let i = 0; i < g.length - 1; i++) {
+            if (g[i + 1].source.value < g[i].source.value) {
               return false
             }
           }
@@ -37,8 +39,8 @@ module.exports = {
         })
 
         if (!isSorted) {
-          const sortedImportNodeGroup = importNodeGroup.map(
-            g => g.sort((a, b) => {
+          const sortedImportNodeGroup = importNodeGroup.map(g =>
+            g.sort((a, b) => {
               if (a.source.value > b.source.value) {
                 return 1
               } else if (a.source.value < b.source.value) {
@@ -53,11 +55,13 @@ module.exports = {
             node,
             message: `import statements should be sorted`,
             fix(fixer) {
-              return sortedImportNodeGroup.map(nodeGroup => fixer.replaceTextRange(
-                getNodeGroupRange(nodeGroup),
-                nodeGroup.map(n => sourceCode.getText(n)).join('\n'),
-              ))
-            }
+              return sortedImportNodeGroup.map(nodeGroup =>
+                fixer.replaceTextRange(
+                  getNodeGroupRange(nodeGroup),
+                  nodeGroup.map(n => sourceCode.getText(n)).join('\n')
+                )
+              )
+            },
           })
         }
       },

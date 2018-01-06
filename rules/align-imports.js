@@ -30,18 +30,15 @@ module.exports = {
 
     return {
       Program: node => {
-        const importNodes = node.body.filter(n => n.type === 'ImportDeclaration')
+        const importNodes = node.body.filter(
+          n => n.type === 'ImportDeclaration'
+        )
         paddingLength = Math.max(
           ...importNodes
             .filter(n => n.specifiers.length > 0)
-            .map(
-              n => sourceCode.getText(n).split('from')[0]
-            )
-            .map(
-              textBlob => Math.max(
-                ...textBlob.split('\n')
-                  .map(s => s.trim().length + 1)
-              )
+            .map(n => sourceCode.getText(n).split('from')[0])
+            .map(textBlob =>
+              Math.max(...textBlob.split('\n').map(s => s.trim().length + 1))
             )
         )
       },
@@ -52,10 +49,11 @@ module.exports = {
           context.report({
             node,
             message: 'import statements should be aligned',
-            fix: (fixer) => fixer.replaceTextRange(
-              node.range,
-              alignNode(sourceCode.getText(node), paddingLength)
-            )
+            fix: fixer =>
+              fixer.replaceTextRange(
+                node.range,
+                alignNode(sourceCode.getText(node), paddingLength)
+              ),
           })
         }
       },
