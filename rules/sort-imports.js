@@ -13,9 +13,9 @@ module.exports = {
     const sourceCode = context.getSourceCode()
 
     return {
-      'Program:exit': node => {
+      Program: node => {
         const importNodes = node.body.filter(
-          n => n.type === 'ImportDeclaration'
+          n => n.type === 'ImportDeclaration',
         )
         const importNodeGroup = importNodes.reduce((arr, n, i) => {
           const prevNode = importNodes[i - 1]
@@ -32,6 +32,7 @@ module.exports = {
           for (let i = 0; i < g.length - 1; i++) {
             if (g[i + 1].source.value < g[i].source.value) {
               unsortedNode = g[i]
+              return
             }
           }
         })
@@ -46,7 +47,7 @@ module.exports = {
               } else {
                 return 0
               }
-            })
+            }),
           )
 
           context.report({
@@ -56,8 +57,8 @@ module.exports = {
               return sortedImportNodeGroup.map(nodeGroup =>
                 fixer.replaceTextRange(
                   getNodeGroupRange(nodeGroup),
-                  nodeGroup.map(n => sourceCode.getText(n)).join('\n')
-                )
+                  nodeGroup.map(n => sourceCode.getText(n)).join('\n'),
+                ),
               )
             },
           })

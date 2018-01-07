@@ -5,8 +5,8 @@ module.exports = {
     recommended: {
       plugins: ['esayemm'],
       rules: {
-        'esayemm/align-imports': 2,
-        'esayemm/sort-imports': 2,
+        'esayemm/align-imports': 'error',
+        'esayemm/sort-imports': 'error',
       },
     },
   },
