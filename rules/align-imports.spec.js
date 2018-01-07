@@ -5,24 +5,20 @@ const rule = require('./align-imports.js')
 const { RuleTester, Linter } = require('eslint')
 
 const linter = new Linter()
-linter.defineRules({
-  'align-imports': rule,
-})
+linter.defineRules({ 'align-imports': rule })
 const ruleTester = new RuleTester({ parserOptions: { sourceType: 'module' } })
+
 ruleTester.run('align-imports', rule, {
   valid: [
+    { code: `` },
     {
-      code: [``].join('\n'),
+      code: `import foo from 'foo'`,
     },
     {
-      code: [``, `import foo from 'foo'`].join('\n'),
-    },
-    {
-      code: [``, `import 'foo'`, `import 'barbar'`].join('\n'),
+      code: [`import 'foo'`, `import 'barbar'`].join('\n'),
     },
     {
       code: [
-        ``,
         `import foo from 'foo'`,
         `import b   from 'b'`,
         `import {`,
@@ -33,11 +29,11 @@ ruleTester.run('align-imports', rule, {
   ],
   invalid: [
     {
-      code: [``, `import foo from 'foo'`, `import b from 'b'`].join('\n'),
+      code: [`import foo from 'foo'`, `import b from 'b'`].join('\n'),
       errors: [{ message: 'import statements should be aligned' }],
     },
     {
-      code: [``, `import b from 'b'`, `import {`, `  zed,`, `} from 'c'`].join(
+      code: [`import b from 'b'`, `import {`, `  zed,`, `} from 'c'`].join(
         '\n'
       ),
       errors: [{ message: 'import statements should be aligned' }],
@@ -46,6 +42,11 @@ ruleTester.run('align-imports', rule, {
 })
 
 describe('align-imports fixable', () => {
+  const linterConfig = {
+    parserOptions: { sourceType: 'module' },
+    rules: { 'align-imports': 'error' },
+  }
+
   it('should align', () => {
     const before = [
       ``,
@@ -62,10 +63,7 @@ describe('align-imports fixable', () => {
       `}        from 'c'`,
     ].join('\n')
 
-    const { output } = linter.verifyAndFix(before, {
-      parserOptions: { sourceType: 'module' },
-      rules: { 'align-imports': 'error' },
-    })
+    const { output } = linter.verifyAndFix(before, linterConfig)
     expect(output).toEqual(expectedResult)
   })
 
@@ -85,10 +83,7 @@ describe('align-imports fixable', () => {
       ``,
     ].join('\n')
 
-    const { output } = linter.verifyAndFix(before, {
-      parserOptions: { sourceType: 'module' },
-      rules: { 'align-imports': 'error' },
-    })
+    const { output } = linter.verifyAndFix(before, linterConfig)
     expect(output).toEqual(expectedResult)
   })
 
@@ -108,10 +103,7 @@ describe('align-imports fixable', () => {
       ``,
     ].join('\n')
 
-    const { output } = linter.verifyAndFix(before, {
-      parserOptions: { sourceType: 'module' },
-      rules: { 'align-imports': 'error' },
-    })
+    const { output } = linter.verifyAndFix(before, linterConfig)
     expect(output).toEqual(expectedResult)
   })
 })

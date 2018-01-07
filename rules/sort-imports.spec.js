@@ -45,12 +45,19 @@ ruleTester.run('sort-imports', rule, {
   invalid: [
     {
       code: [
-        ``,
         `import c from 'c'`,
         `import a from 'a'`,
         `import b from 'b'`,
       ].join('\n'),
-      errors: [{ message: 'import statements should be sorted' }],
+      errors: [{ message: 'import statements should be sorted', line: 1 }],
+    },
+    {
+      code: [
+        `import a from 'a'`,
+        `import c from 'c'`,
+        `import b from 'b'`,
+      ].join('\n'),
+      errors: [{ message: 'import statements should be sorted', line: 2 }],
     },
   ],
 })

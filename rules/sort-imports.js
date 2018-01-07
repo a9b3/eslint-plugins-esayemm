@@ -8,9 +8,7 @@ function getNodeGroupRange(nodeGroup) {
 }
 
 module.exports = {
-  meta: {
-    fixable: 'code',
-  },
+  meta: { fixable: 'code' },
   create: context => {
     const sourceCode = context.getSourceCode()
 
@@ -29,16 +27,16 @@ module.exports = {
         }, [])
 
         // check if its already sorted
-        const isSorted = importNodeGroup.every(g => {
+        let unsortedNode
+        importNodeGroup.forEach(g => {
           for (let i = 0; i < g.length - 1; i++) {
             if (g[i + 1].source.value < g[i].source.value) {
-              return false
+              unsortedNode = g[i]
             }
           }
-          return true
         })
 
-        if (!isSorted) {
+        if (unsortedNode) {
           const sortedImportNodeGroup = importNodeGroup.map(g =>
             g.sort((a, b) => {
               if (a.source.value > b.source.value) {
@@ -52,7 +50,7 @@ module.exports = {
           )
 
           context.report({
-            node,
+            node: unsortedNode,
             message: `import statements should be sorted`,
             fix(fixer) {
               return sortedImportNodeGroup.map(nodeGroup =>
