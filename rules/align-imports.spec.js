@@ -30,13 +30,13 @@ ruleTester.run('align-imports', rule, {
   invalid: [
     {
       code: [`import foo from 'foo'`, `import b from 'b'`].join('\n'),
-      errors: [{ message: 'import statements should be aligned' }],
+      errors: [{ message: 'import statements should be aligned', line: 2 }],
     },
     {
       code: [`import b from 'b'`, `import {`, `  zed,`, `} from 'c'`].join(
         '\n'
       ),
-      errors: [{ message: 'import statements should be aligned' }],
+      errors: [{ message: 'import statements should be aligned', line: 2 }],
     },
   ],
 })
