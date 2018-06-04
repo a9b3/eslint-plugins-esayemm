@@ -1,7 +1,8 @@
 'use strict'
 
-function isAligned(nodeText, paddingLength) {
-  const textBlob = nodeText.split('from')[0]
+function isAligned(nodeText = '', paddingLength) {
+  const match = /(.*)from/.exec(nodeText)
+  const textBlob = match ? match[1] : ''
   const lines = textBlob.split('\n')
   const lastLine = lines[lines.length - 1]
   return lastLine.length === paddingLength
@@ -31,15 +32,15 @@ module.exports = {
     return {
       Program: node => {
         const importNodes = node.body.filter(
-          n => n.type === 'ImportDeclaration'
+          n => n.type === 'ImportDeclaration',
         )
         paddingLength = Math.max(
           ...importNodes
             .filter(n => n.specifiers.length > 0)
-            .map(n => sourceCode.getText(n).split('from')[0])
+            .map(n => /(.*)from/.exec(sourceCode.getText(n))[1])
             .map(textBlob =>
-              Math.max(...textBlob.split('\n').map(s => s.trim().length + 1))
-            )
+              Math.max(...textBlob.split('\n').map(s => s.trim().length + 1)),
+            ),
         )
       },
       ImportDeclaration: node => {
@@ -52,7 +53,7 @@ module.exports = {
             fix: fixer =>
               fixer.replaceTextRange(
                 node.range,
-                alignNode(sourceCode.getText(node), paddingLength)
+                alignNode(sourceCode.getText(node), paddingLength),
               ),
           })
         }

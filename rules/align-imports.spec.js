@@ -34,7 +34,7 @@ ruleTester.run('align-imports', rule, {
     },
     {
       code: [`import b from 'b'`, `import {`, `  zed,`, `} from 'c'`].join(
-        '\n'
+        '\n',
       ),
       errors: [{ message: 'import statements should be aligned', line: 2 }],
     },
@@ -100,6 +100,26 @@ describe('align-imports fixable', () => {
       `import b  from 'b'`,
       ``,
       `import ab from 'ab'`,
+      ``,
+    ].join('\n')
+
+    const { output } = linter.verifyAndFix(before, linterConfig)
+    expect(output).toEqual(expectedResult)
+  })
+
+  it('should align words with from', () => {
+    const before = [
+      ``,
+      `import { fromJS } from 'b'`,
+      ``,
+      `import ab             from 'ab'`,
+      ``,
+    ].join('\n')
+    const expectedResult = [
+      ``,
+      `import { fromJS } from 'b'`,
+      ``,
+      `import ab         from 'ab'`,
       ``,
     ].join('\n')
 
