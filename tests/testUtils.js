@@ -1,15 +1,12 @@
 const { curry } = require('ramda')
 const expect = require('expect')
 
-const lintTest = curry((linter, rule, input, output) => {
-  const messages = linter.verifyAndFix(input, {
-    parserOptions: { sourceType: 'module' },
-    rules: { 'sort-imports': 'error' },
-  })
+const testVerifyAndFix = curry((linter, config, { input, output }) => {
+  const messages = linter.verifyAndFix(input, config)
   expect(messages.fixed).toBe(true)
   expect(messages.output).toEqual(output)
 })
 
 module.exports = {
-  lintTest,
+  testVerifyAndFix,
 }

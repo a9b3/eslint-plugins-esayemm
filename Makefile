@@ -13,10 +13,10 @@ deps:
 	@yarn
 
 test:
-	@./node_modules/mocha/bin/mocha tests
+	@./node_modules/mocha/bin/mocha --recursive tests/rules
 
 test.watch:
-	@./node_modules/mocha/bin/mocha --watch tests
+	@./node_modules/mocha/bin/mocha --recursive --watch tests/rules
 
 test.%:
-	@./node_modules/mocha/bin/mocha --watch tests
+	@./node_modules/mocha/bin/mocha --recursive --watch tests/rules

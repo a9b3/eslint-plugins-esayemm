@@ -3,11 +3,12 @@
 const expect = require('expect')
 const rule = require('../../lib/rules/align-imports.js')
 const { RuleTester, Linter } = require('eslint')
+const { testVerifyAndFix } = require('../testUtils.js')
 
-const linter = new Linter()
-linter.defineRules({ 'align-imports': rule })
 const ruleTester = new RuleTester({ parserOptions: { sourceType: 'module' } })
 
+// ruleTester will test for valid and invalid outputs, not but if the rule will
+// fix the code properly
 ruleTester.run('align-imports', rule, {
   valid: [
     { code: `` },
@@ -41,89 +42,72 @@ ruleTester.run('align-imports', rule, {
   ],
 })
 
+// This section will test the rule to see if fixing works.
 describe('align-imports fixable', () => {
-  const linterConfig = {
+  const linter = new Linter()
+  linter.defineRules({ 'align-imports': rule })
+  const testAlignImports = testVerifyAndFix(linter, {
     parserOptions: { sourceType: 'module' },
     rules: { 'align-imports': 'error' },
-  }
+  })
 
   it('should align', () => {
-    const before = [
-      ``,
-      `import b from 'b'`,
-      `import {`,
-      `  zed,`,
-      `} from 'c'`,
-    ].join('\n')
-    const expectedResult = [
-      ``,
-      `import b from 'b'`,
-      `import {`,
-      `  zed,`,
-      `}        from 'c'`,
-    ].join('\n')
-
-    const { output } = linter.verifyAndFix(before, linterConfig)
-    expect(output).toEqual(expectedResult)
+    testAlignImports({
+      input: [``, `import b from 'b'`, `import {`, `  zed,`, `} from 'c'`].join(
+        '\n',
+      ),
+      output: [
+        ``,
+        `import b from 'b'`,
+        `import {`,
+        `  zed,`,
+        `}        from 'c'`,
+      ].join('\n'),
+    })
   })
 
   it('should align import groups', () => {
-    const before = [
-      ``,
-      `import b from 'b'`,
-      ``,
-      `import ab from 'ab'`,
-      ``,
-    ].join('\n')
-    const expectedResult = [
-      ``,
-      `import b  from 'b'`,
-      ``,
-      `import ab from 'ab'`,
-      ``,
-    ].join('\n')
-
-    const { output } = linter.verifyAndFix(before, linterConfig)
-    expect(output).toEqual(expectedResult)
+    testAlignImports({
+      input: [``, `import b from 'b'`, ``, `import ab from 'ab'`, ``].join(
+        '\n',
+      ),
+      output: [``, `import b  from 'b'`, ``, `import ab from 'ab'`, ``].join(
+        '\n',
+      ),
+    })
   })
 
   it('should trim extra spaces', () => {
-    const before = [
-      ``,
-      `import b          from 'b'`,
-      ``,
-      `import ab             from 'ab'`,
-      ``,
-    ].join('\n')
-    const expectedResult = [
-      ``,
-      `import b  from 'b'`,
-      ``,
-      `import ab from 'ab'`,
-      ``,
-    ].join('\n')
-
-    const { output } = linter.verifyAndFix(before, linterConfig)
-    expect(output).toEqual(expectedResult)
+    testAlignImports({
+      input: [
+        ``,
+        `import b          from 'b'`,
+        ``,
+        `import ab             from 'ab'`,
+        ``,
+      ].join('\n'),
+      output: [``, `import b  from 'b'`, ``, `import ab from 'ab'`, ``].join(
+        '\n',
+      ),
+    })
   })
 
   it('should align words with from', () => {
-    const before = [
-      ``,
-      `import { fromJS } from 'b'`,
-      ``,
-      `import ab             from 'ab'`,
-      ``,
-    ].join('\n')
-    const expectedResult = [
-      ``,
-      `import { fromJS } from 'b'`,
-      ``,
-      `import ab         from 'ab'`,
-      ``,
-    ].join('\n')
-
-    const { output } = linter.verifyAndFix(before, linterConfig)
-    expect(output).toEqual(expectedResult)
+    testAlignImports({
+      input: [
+        ``,
+        `import { fromJS } from 'b'`,
+        ``,
+        `import ab             from 'ab'`,
+        ``,
+      ].join('\n'),
+      output: [
+        ``,
+        `import { fromJS } from 'b'`,
+        ``,
+        `import ab         from 'ab'`,
+        ``,
+      ].join('\n'),
+    })
   })
 })
