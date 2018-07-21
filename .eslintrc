@@ -1,1 +1,4 @@
-{}
+{
+  "env": {"es9": true},
+  "extends": "eslint:recommended"
+}
