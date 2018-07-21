@@ -1,9 +1,9 @@
 'use strict'
 
 const expect = require('expect')
-const rule = require('./sort-imports.js')
+const rule = require('../../lib/rules/sort-imports.js')
 const { RuleTester, Linter } = require('eslint')
-const { lintTest } = require('./testUtils')
+const { lintTest } = require('../testUtils.js')
 
 const linter = new Linter()
 linter.defineRules({ 'sort-imports': rule })

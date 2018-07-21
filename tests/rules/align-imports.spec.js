@@ -1,7 +1,7 @@
 'use strict'
 
 const expect = require('expect')
-const rule = require('./align-imports.js')
+const rule = require('../../lib/rules/align-imports.js')
 const { RuleTester, Linter } = require('eslint')
 
 const linter = new Linter()

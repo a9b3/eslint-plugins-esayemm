@@ -12,5 +12,8 @@
   },
   "scripts": {
     "postversion": "git push && git push --tags && npm publish ./"
+  },
+  "dependencies": {
+    "ramda": "0.25.0"
   }
 }

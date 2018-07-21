@@ -13,15 +13,10 @@ deps:
 	@yarn
 
 test:
-	@./node_modules/mocha/bin/mocha \
-		$$(find . -name '*.spec.js' ! -ipath '*node_modules*')
+	@./node_modules/mocha/bin/mocha tests
 
 test.watch:
-	@./node_modules/mocha/bin/mocha \
-		--watch \
-		$$(find . -name '*.spec.js' ! -ipath '*node_modules*')
+	@./node_modules/mocha/bin/mocha --watch tests
 
 test.%:
-	@./node_modules/mocha/bin/mocha \
-		--watch \
-		$$(find . -name '*$**.spec.js' ! -ipath '*node_modules*')
+	@./node_modules/mocha/bin/mocha --watch tests
