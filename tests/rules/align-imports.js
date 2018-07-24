@@ -1,6 +1,5 @@
 'use strict'
 
-const expect = require('expect')
 const rule = require('../../lib/rules/align-imports.js')
 const { RuleTester, Linter } = require('eslint')
 const { testVerifyAndFix } = require('../testUtils.js')
