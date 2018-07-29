@@ -35,32 +35,31 @@ ruleTester.run('sort-imports', rule, {
     },
     {
       code: [
-        `import b from 'b'`,
+        `import a from 'a'`,
         `import c from 'c'`,
         ``,
-        `import a from 'a'`,
-      ].join('\n'),
-    },
-    {
-      code: [
         `import d from './abc'`,
         `import e from './bcd'`,
-        `import a from 'a'`,
-        `import c from 'c'`,
       ].join('\n'),
     },
   ],
   invalid: [
     {
+      code: [`import b from 'b'`, `const x = 'hi'`, `import c from 'c'`].join(
+        '\n',
+      ),
+      errors: [
+        { message: 'imports must be grouped and sorted', line: 1 },
+        { message: 'imports should be at the top of file', line: 3 },
+      ],
+    },
+    {
       code: [
         `import c from 'c'`,
         `import a from 'a'`,
         `import b from 'b'`,
       ].join('\n'),
-      errors: [
-        { message: 'import statements should be sorted', line: 1 },
-        { message: 'import statements should be sorted', line: 3 },
-      ],
+      errors: [{ message: 'imports must be grouped and sorted', line: 1 }],
     },
     {
       code: [
@@ -70,7 +69,7 @@ ruleTester.run('sort-imports', rule, {
         `} from 'c'`,
         `import b from 'b'`,
       ].join('\n'),
-      errors: [{ message: 'import statements should be sorted', line: 2 }],
+      errors: [{ message: 'imports must be grouped and sorted', line: 1 }],
     },
     {
       code: [
@@ -78,18 +77,7 @@ ruleTester.run('sort-imports', rule, {
         `import c from 'c'`,
         `import b from 'b'`,
       ].join('\n'),
-      errors: [{ message: 'import statements should be sorted', line: 2 }],
-    },
-    {
-      code: [
-        `import a from 'a'`,
-        `import b from 'b'`,
-        `import c from 'c'`,
-        ``,
-        `import e from 'e'`,
-        `import d from 'd'`,
-      ].join('\n'),
-      errors: [{ message: 'import statements should be sorted', line: 5 }],
+      errors: [{ message: 'imports must be grouped and sorted', line: 1 }],
     },
   ],
 })
@@ -105,6 +93,34 @@ describe('sort-imports fixable', () => {
 
   it('should sort imports', () => {
     map(testSortImports, [
+      {
+        input: [
+          `import b from 'b'`,
+          `import {`,
+          `  aa,`,
+          `  bb,`,
+          `  cc,`,
+          `} from 'a'`,
+          `import c from 'c'`,
+        ].join('\n'),
+        output: [
+          `import { aa, bb, cc } from 'a'`,
+          `import b from 'b'`,
+          `import c from 'c'`,
+        ].join('\n'),
+      },
+      {
+        input: [
+          `import a from 'a'`,
+          `const x = 'hi'`,
+          `import b from 'b'`,
+        ].join('\n'),
+        output: [
+          `import a from 'a'`,
+          `import b from 'b'`,
+          `const x = 'hi'`,
+        ].join('\n'),
+      },
       {
         input: [`import b from 'b'`, `import a from 'a'`].join('\n'),
         output: [`import a from 'a'`, `import b from 'b'`].join('\n'),
@@ -131,54 +147,8 @@ describe('sort-imports fixable', () => {
           `} from 'a'`,
         ].join('\n'),
         output: [
-          `import { `,
-          `  a,`,
-          `  b,`,
-          `  c`,
-          `} from 'a'`,
+          `import { a, b, c } from 'a'`,
           `import { something } from 'b'`,
-        ].join('\n'),
-      },
-      {
-        input: [
-          `import a from 'a'`,
-          `import c from 'c'`,
-          `import b from 'b'`,
-          ``,
-          `import e from 'e'`,
-          `import d from 'd'`,
-          `import f from 'f'`,
-        ].join('\n'),
-        output: [
-          `import a from 'a'`,
-          `import b from 'b'`,
-          `import c from 'c'`,
-          ``,
-          `import d from 'd'`,
-          `import e from 'e'`,
-          `import f from 'f'`,
-        ].join('\n'),
-      },
-      {
-        input: [
-          `import b from 'b'`,
-          `import a from 'a'`,
-          ``,
-          `import c from 'c'`,
-          `import d from 'd'`,
-          ``,
-          `import f from 'f'`,
-          `import e from 'e'`,
-        ].join('\n'),
-        output: [
-          `import a from 'a'`,
-          `import b from 'b'`,
-          ``,
-          `import c from 'c'`,
-          `import d from 'd'`,
-          ``,
-          `import e from 'e'`,
-          `import f from 'f'`,
         ].join('\n'),
       },
     ])
