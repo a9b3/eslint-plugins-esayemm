@@ -42,6 +42,16 @@ ruleTester.run('sort-imports', rule, {
         `import e from './bcd'`,
       ].join('\n'),
     },
+    {
+      code: [
+        `import a from 'a'`,
+        `import c from 'c'`,
+        ``,
+        `import d from './abc'`,
+        `import e from './bcd'`,
+        `import 'what'`,
+      ].join('\n'),
+    },
   ],
   invalid: [
     {
@@ -149,6 +159,22 @@ describe('sort-imports fixable', () => {
         output: [
           `import { a, b, c } from 'a'`,
           `import { something } from 'b'`,
+        ].join('\n'),
+      },
+      {
+        input: [
+          `import { something } from 'b'`,
+          `import 'zed'`,
+          `import { `,
+          `  a,`,
+          `  b,`,
+          `  c`,
+          `} from 'a'`,
+        ].join('\n'),
+        output: [
+          `import { a, b, c } from 'a'`,
+          `import { something } from 'b'`,
+          `import 'zed'`,
         ].join('\n'),
       },
     ])
