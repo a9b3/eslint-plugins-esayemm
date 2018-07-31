@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-esayemm",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "index.js",
   "author": "Sam Lau <esayemm@gmail.com>",
   "license": "MIT",
