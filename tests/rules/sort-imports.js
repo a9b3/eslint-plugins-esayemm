@@ -52,6 +52,9 @@ ruleTester.run('sort-imports', rule, {
         `import 'what'`,
       ].join('\n'),
     },
+    {
+      code: [`import b, { a } from 'a'`].join('\n'),
+    },
   ],
   invalid: [
     {
