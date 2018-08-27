@@ -177,6 +177,22 @@ describe('sort-imports fixable', () => {
           `import 'zed'`,
         ].join('\n'),
       },
+      {
+        input: [
+          `import { something } from 'b'`,
+          `import 'zed'`,
+          `import Foo, { `,
+          `  a,`,
+          `  b,`,
+          `  c`,
+          `} from 'a'`,
+        ].join('\n'),
+        output: [
+          `import Foo, { a, b, c } from 'a'`,
+          `import { something } from 'b'`,
+          `import 'zed'`,
+        ].join('\n'),
+      },
     ])
   })
 })
